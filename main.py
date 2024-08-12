@@ -3,9 +3,16 @@ def main():
     div_equip = get_equip()
     equip_costs = get_costs(div_equip)
     equip_ratios = get_ratios(equip_costs)
-    print(equip_ratios)
     factories_needed = allocate_factories(equip_ratios)
-    print(factories_needed)
+    output(factories_needed)
+    return
+
+def output(facs):
+    print("Your factories should be allocated as follows...")
+    for fac in facs:
+        print(f"{round(facs[fac], 1)} factories producing {fac}.")
+    print("Good luck.")
+
 
 def allocate_factories(ratios):
     total_fac = int(input("How many military factories are you allocating to these divisions? "))
