@@ -1,9 +1,10 @@
 import values
 def main():
+    total_fac = int(input("How many military factories are you allocating to these divisions? "))
     div_equip = get_equip()
     equip_costs = get_costs(div_equip)
     equip_ratios = get_ratios(equip_costs)
-    factories_needed = allocate_factories(equip_ratios)
+    factories_needed = allocate_factories(equip_ratios, total_fac)
     output(factories_needed)
     return
 
@@ -15,11 +16,10 @@ def output(facs):
     return
 
 
-def allocate_factories(ratios):
-    total_fac = int(input("How many military factories are you allocating to these divisions? "))
+def allocate_factories(ratios, facs):
     fac_needed = {}
     for item in ratios:
-        fac_needed.update({item: (ratios[item] * total_fac)})
+        fac_needed.update({item: (ratios[item] * facs)})
     return fac_needed
 
 
