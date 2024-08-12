@@ -11,13 +11,14 @@ def main():
     output(factories_needed)
     return
 
+# pull some user-friendly names from our values module, then output our product
 def output(facs):
     names = values.get_names()
     fac_names = {}
     for item in facs:
         if item in names:
             fac_names.update({names[item]: facs[item]})
-        else:
+        else: # tank designer stuff already has user friendly names (see get_equip() below to see why the other stuff doesn't)
             fac_names.update({item: facs[item]})
     print("===== Your factories should be allocated as follows =====")
     for fac in fac_names:
@@ -25,14 +26,14 @@ def output(facs):
     print("\nThese obviously aren't whole numbers.\nI recommend rounding down for basic stuff that can be easily bought/captured and rounding up for fancy stuff that can be easily sold/kept in reserve.\nGood luck.")
     return
 
-
+# multiply ratio by our quantity of factories and build a new dictionary out of it, ez pz
 def allocate_factories(ratios, facs):
     fac_needed = {}
     for item in ratios:
         fac_needed.update({item: (ratios[item] * facs)})
     return fac_needed
 
-
+# get the sum cost for one division, then divide each item's cost to get the ratio of factories we need
 def get_ratios(costs):
     total_cost = 0.0
     for item in costs:
@@ -42,14 +43,14 @@ def get_ratios(costs):
         ratios.update({item: (costs[item] / total_cost)})
     return ratios
 
-
+# iterate through the dict of equipment we've been building and multiply the values corresponding in the cost dict from values.py
 def get_costs(equip, costs):
     output = {}
     for item in equip:
         output.update({item: (equip[item] * costs[item])})
     return output
 
-
+# iterate through tank designer equipment *by role*, updating both the cost dictionary and the division dictionary as needed
 def get_custom(div, costs):
     print("Does your division include custom vehicles of any of the following roles?")
     roles = values.init_designed_vehicles()
@@ -63,15 +64,14 @@ def get_custom(div, costs):
     return div, costs
 
 
-
+# find out what we're building
 def get_equip():
     div_equip = {}
-    designed_costs = {}
 
     inf_needed = int(input("How much infantry equipment does your division need? "))
     if inf_needed > 0:
         print("Select type of equipment to be produced...\n0: Basic\n1: Inf Equipment 1\n2: Inf Equipment 2\n3: Inf Equipment 3")
-        r = input()
+        r = input() # we can just plug the user's input directly into the dictionary key string to record what level of equipment we're building!
         div_equip.update({f"inf{r}": inf_needed})
     
     trucks_needed = int(input("How many trucks does your division need? "))

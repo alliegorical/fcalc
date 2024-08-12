@@ -1,3 +1,5 @@
+# raw data here, likely to change, need to keep up to date
+
 def init_equip_cost():
     equip_cost = {
         "inf0": 0.43,
