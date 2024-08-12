@@ -12,6 +12,7 @@ def output(facs):
     for fac in facs:
         print(f"{round(facs[fac], 1)} factories producing {fac}.")
     print("Good luck.")
+    return
 
 
 def allocate_factories(ratios):
