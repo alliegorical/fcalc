@@ -2,17 +2,27 @@ import values
 def main():
     total_fac = int(input("How many military factories are you allocating to these divisions? "))
     div_equip = get_equip()
-    equip_costs = get_costs(div_equip)
-    equip_ratios = get_ratios(equip_costs)
+    equip_costs = values.init_equip_cost()
+    if input("Does your division include anything created in the tank designer? (y/n) ") == "y":
+        div_equip, equip_costs = get_custom(div_equip, equip_costs)
+    div_costs = get_costs(div_equip, equip_costs)
+    equip_ratios = get_ratios(div_costs)
     factories_needed = allocate_factories(equip_ratios, total_fac)
     output(factories_needed)
     return
 
 def output(facs):
-    print("Your factories should be allocated as follows...")
-    for fac in facs:
-        print(f"{round(facs[fac], 1)} factories producing {fac}.")
-    print("Good luck.")
+    names = values.get_names()
+    fac_names = {}
+    for item in facs:
+        if item in names:
+            fac_names.update({names[item]: facs[item]})
+        else:
+            fac_names.update({item: facs[item]})
+    print("===== Your factories should be allocated as follows =====")
+    for fac in fac_names:
+        print(f"{round(fac_names[fac], 1)} factories producing {fac}.")
+    print("\nThese obviously aren't whole numbers.\nI recommend rounding down for basic stuff that can be easily bought/captured and rounding up for fancy stuff that can be easily sold/kept in reserve.\nGood luck.")
     return
 
 
@@ -33,16 +43,30 @@ def get_ratios(costs):
     return ratios
 
 
-def get_costs(equip):
-    costs = values.init_equip_cost()
+def get_costs(equip, costs):
     output = {}
     for item in equip:
         output.update({item: (equip[item] * costs[item])})
     return output
 
 
+def get_custom(div, costs):
+    print("Does your division include custom vehicles of any of the following roles?")
+    roles = values.init_designed_vehicles()
+    for role in roles:
+        r = (input(f"{role}? (y/n) "))
+        if r == "y":
+            q = int(input("How many? "))
+            c = float(input("How much does each cost? "))
+            div.update({role: q})
+            costs.update({role: c})
+    return div, costs
+
+
+
 def get_equip():
     div_equip = {}
+    designed_costs = {}
 
     inf_needed = int(input("How much infantry equipment does your division need? "))
     if inf_needed > 0:
@@ -105,6 +129,9 @@ def get_equip():
         div_equip.update({"supp": trucks_needed})
     
     return div_equip
+
+
+
 
 
 main()
